@@ -58,8 +58,6 @@ export const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // const storageAvailable = localStorageAvailable();
-
   const initialize = useCallback(async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
@@ -67,7 +65,7 @@ export function AuthProvider({ children }) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
         const decodeToken = jwtDecode(accessToken);
-        // console.log(decodeToken)
+
         const response = await axios.get(`/api/user/${decodeToken?.id}`, {
           headers: {
             "x-api-key": process.env.REACT_APP_API_KEY,

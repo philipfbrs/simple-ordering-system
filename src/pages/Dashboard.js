@@ -6,7 +6,7 @@ import { jwtDecode } from "../component/utils/utils";
 import { useAuthContext } from "../component/hooks/useAuthContext";
 
 export const Dashboard = () => {
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
   const isLoading = useProductStore((state) => state.isLoading);
   const products = useProductStore((state) => state.products);
   const getProducts = useProductStore((state) => state.getProducts);
@@ -60,7 +60,7 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="px-10 md:px-20 pt-16">
+    <div className="px-10 md:px-20 pt-16  mb-20">
       <section className="mb-8 flex">
         <h2
           className="text-2xl leading-9 text-slate-400 font-semibold justify-center items-center text-center

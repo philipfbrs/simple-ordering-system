@@ -6,7 +6,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 export default function GuestGuard({ children }) {
   const { isAuthenticated, isInitialized } = useAuthContext();
-  console.log("Test2")
+
   if (isAuthenticated) {
     return <Navigate to={"/"} />;
   }
