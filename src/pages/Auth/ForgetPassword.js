@@ -8,20 +8,18 @@ import Swal from "sweetalert2";
 import { useAuthContext } from "../../component/hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const ForgetPassword = () => {
+  // const { login, initialize } = useAuthContext();
   const navigate = useNavigate();
-  const { login, initialize } = useAuthContext();
   const schema = yup
     .object({
       email: yup.string().email("Invalid Email").required("Email is required!"),
-      password: yup.string().required("Password is required!"),
     })
     .required();
 
   const defaultValues = useMemo(() => {
     return {
       email: "",
-      password: "",
     };
   }, []);
 
@@ -38,14 +36,11 @@ export const Login = () => {
     defaultValues,
   });
 
-  const onSubmit = async (data) => {
-    return handleSubmitData(data);
-  };
-
-  const handleSubmitData = async (payload) => {
+  const onSubmit = async (payload) => {
     try {
-      await login(payload.email, payload.password);
-      await initialize();
+      console.log(payload)
+      // await login(payload.email, payload.password);
+      // await initialize();
     } catch (error) {
       console.error(error);
       reset();
@@ -68,7 +63,10 @@ export const Login = () => {
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
-      <img className="opacity-50 absolute w-full h-full" src="https://images.pexels.com/photos/6214476/pexels-photo-6214476.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"/>
+      <img
+        className="opacity-50 absolute w-full h-full"
+        src="https://images.pexels.com/photos/6214476/pexels-photo-6214476.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      />
       <div className="z-10 w-full h-full sm:h-[700px] sm:w-[1200px] bg-white rounded-none sm:rounded-3xl flex justify-center mx-0 sm:mx-4 opacity-100">
         <div className="w-[80%] bg-blue-500 lg:block hidden rounded-l-3xl">
           <img
@@ -80,23 +78,22 @@ export const Login = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex h-full flex-col justify-between items-center p-2 sm:p-8 "
         >
-          <div className="flex flex-col justify-center items-center mt-8 sm:mt-0">
+          <div className="flex flex-col justify-center items-center text-center mt-8 sm:mt-0">
             <h1
               className="font-bold text-green-800 p-0 m-3 text-4xl
           "
             >
-              Sign In
+              Forget Password
             </h1>
 
-            <h2>We offer products!</h2>
+            <h2>Please enter your email.</h2>
             {!!errors.afterSubmit && (
               <div className="bg-red-300 rounded-md my-4 py-2 px-10">
-                {" "}
-                <p className="text-xs">{errors?.afterSubmit.message}</p>{" "}
+                <p className="text-xs">{errors?.afterSubmit.message}</p>
               </div>
             )}
-            <div className="flex justify-center flex-col text-start w-full px-10 text-[#212121] mt-8">
-              <div className="w-full items-center justify-between ml-2.5 m-0 sm:mx-[18px] pr-0 sm:pr-[38px] mb-2.5 sm:mb-0">
+            <div className="flex justify-center flex-col text-start w-full px-10 text-[#212121] my-8">
+              <div className="w-full items-center justify-between mx-[18px] pr-[38px] mb-2.5 sm:mb-0">
                 <label className="w-1/3 mr-4 font-semibold">Email:</label>
                 <input
                   className={`p-2 w-full bg-slate-200 mt-0.5 rounded-md ${
@@ -110,7 +107,7 @@ export const Login = () => {
                   {errors.email?.message}
                 </p>
               </div>
-              <div className="flex m-0 sm:m-2.5 flex-col sm:flex-row">
+              {/* <div className="flex m-0 sm:m-2.5 flex-col sm:flex-row">
                 <div className="w-full items-center justify-between mx-2.5">
                   <label className="w-1/3 mr-4 font-semibold">Password: </label>
                   <input
@@ -122,32 +119,21 @@ export const Login = () => {
                     }`}
                     {...register("password")}
                   />
-                  <div className="flex w-full justify-between mt-1">
-                    <p className="text-xs text-red-700">
-                      {errors.password?.message}
-                    </p>
-                    <a
-                      className="text-xs underline text-gray-700 cursor-pointer my-2.5 sm:my-1"
-                      onClick={() => handleNavigate("/forget-password")}
-                    >
-                      Forget Password?
-                    </a>
-                  </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
-            <div className="justify-center flex items-center my-2">
+            <div className="justify-center flex items-center">
               <button
                 type="button"
-                disabled={true}
+                onClick={() => handleNavigate("/login")}
                 className="font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 bg-slate-300 text-white"
               >
-                Sign Up
+                Cancel
               </button>
               <input
                 type="submit"
-                value={"Login"}
+                value={"Confirm"}
                 className="cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
               />
             </div>

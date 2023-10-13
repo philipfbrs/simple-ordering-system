@@ -1,5 +1,6 @@
 import "./App.css";
 import { Login } from "./pages/Auth/Login";
+import { ForgetPassword } from "./pages/Auth/ForgetPassword";
 import { Layout } from "./component/Layout";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./component/context/JwtContext";
@@ -15,9 +16,12 @@ function App() {
         <Routes>
           <Route path="/login" element={<GuestGuard children={<Login />} />} />
           <Route
-            element={<AuthGuard children={<Layout />} />}
-          >
+            path="/forget-password"
+            element={<GuestGuard children={<ForgetPassword />} />}
+          />
+          <Route element={<AuthGuard children={<Layout />} />}>
             <Route index element={<Dashboard />} />
+
             <Route path="/my-cart" element={<MyCart />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
@@ -27,4 +31,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
