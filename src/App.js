@@ -8,6 +8,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { MyCart } from "./pages/MyCart";
 import { AuthGuard } from "./component/guard/AuthGuard";
 import GuestGuard from "./component/guard/GuestGuard";
+import { ResetPassword } from "./pages/Auth/ResetPassword";
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
           <Route
             path="/forget-password"
             element={<GuestGuard children={<ForgetPassword />} />}
+          />
+          <Route
+            path="/reset-password"
+            element={<GuestGuard children={<ResetPassword />} />}
           />
           <Route element={<AuthGuard children={<Layout />} />}>
             <Route index element={<Dashboard />} />

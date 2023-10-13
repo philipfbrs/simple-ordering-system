@@ -5,21 +5,43 @@ import * as yup from "yup";
 // import Stepper from "./Stepper";
 import Swal from "sweetalert2";
 import { useAuthContext } from "../../component/hooks/useAuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "../../component/utils/axios";
 
-export const ForgetPassword = () => {
+export const ResetPassword = () => {
   // const { login, initialize } = useAuthContext();
   const navigate = useNavigate();
+  const [token,setToken] = useState(null);
+  useEffect(() => {
+    try {
+      let search = window.location.search;
+      let params = new URLSearchParams(search);
+      let token = params.get("token");
+      if (!token) {
+        handleNavigate("/login");
+      }
+      setToken(token);
+    } catch (Err) {
+      handleNavigate("/login");
+    }
+  }, []);
+
   const schema = yup
     .object({
-      email: yup.string().email("Invalid Email").required("Email is required!"),
+      confirmPassword: yup
+        .string()
+        .oneOf([yup.ref("password"), null], "Passwords must match"),
+      password: yup
+        .string()
+        .required("Password is required!")
+        .min(5, "Minimum of 5 characters"),
     })
     .required();
 
   const defaultValues = useMemo(() => {
     return {
-      email: "",
+      confirmPassword: "",
+      password: "",
     };
   }, []);
 
@@ -38,10 +60,11 @@ export const ForgetPassword = () => {
 
   const onSubmit = async (payload) => {
     try {
+      console.log(payload);
       const response = axios
         .post(
-          "/api/auth/request-reset-password",
-          { ...payload },
+          `/api/auth/reset-password?token=${token}`,
+          payload,
           {
             headers: {
               "x-api-key": process.env.REACT_APP_API_KEY,
@@ -49,15 +72,16 @@ export const ForgetPassword = () => {
           }
         )
         .then((res) => res.data)
-        .then((res) => Swal.fire("Email sent!", "", "success"))
-        .catch((res) => Swal.fire("Account does not exist!", "", "error"));
+        .then((res) => Swal.fire("Password reset successfully", "", "success"))
+        .catch((res) => Swal.fire("Reset password expired!", "", "error"));
+      handleNavigate("/login");
     } catch (error) {
-      console.error(error);
       reset();
       setError("afterSubmit", {
         ...error,
         message: error.message,
       });
+      handleNavigate("/login");
     }
   };
 
@@ -104,17 +128,33 @@ export const ForgetPassword = () => {
             )}
             <div className="flex justify-center flex-col text-start w-full px-10 text-[#212121] my-8">
               <div className="w-full items-center justify-between mx-[18px] pr-[38px] mb-2.5 sm:mb-0">
-                <label className="w-1/3 mr-4 font-semibold">Email:</label>
-                <input
+                <label className="w-1/3 mr-4 font-semibold">
+                  Confirm Password:
+                </label>
+                <input type="password"
                   className={`p-2 w-full bg-slate-200 mt-0.5 rounded-md ${
-                    errors.email?.message
+                    errors.confirmPassword?.message
                       ? "outline-red-700 border-red-700"
                       : "border-black outline-black"
                   }`}
-                  {...register("email")}
+                  {...register("confirmPassword")}
                 />
                 <p className="text-xs text-red-700 mt-1">
-                  {errors.email?.message}
+                  {errors.confirmPassword?.message}
+                </p>
+              </div>
+              <div className="w-full items-center justify-between mx-[18px] pr-[38px] mb-2.5 sm:mb-0">
+                <label className="w-1/3 mr-4 font-semibold">Password:</label>
+                <input type="password"
+                  className={`p-2 w-full bg-slate-200 mt-0.5 rounded-md ${
+                    errors.password?.message
+                      ? "outline-red-700 border-red-700"
+                      : "border-black outline-black"
+                  }`}
+                  {...register("password")}
+                />
+                <p className="text-xs text-red-700 mt-1">
+                  {errors.password?.message}
                 </p>
               </div>
               {/* <div className="flex m-0 sm:m-2.5 flex-col sm:flex-row">
